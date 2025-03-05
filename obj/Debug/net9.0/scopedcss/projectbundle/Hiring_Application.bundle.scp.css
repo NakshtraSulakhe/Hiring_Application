@@ -1,0 +1,62 @@
+/* _content/Hiring_Application/Views/Shared/_Layout.cshtml.rz.scp.css */
+/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand[b-3w0eo5inte] {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+a[b-3w0eo5inte] {
+  color: #0077cc;
+}
+
+.btn-primary[b-3w0eo5inte] {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active[b-3w0eo5inte], .nav-pills .show > .nav-link[b-3w0eo5inte] {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.border-top[b-3w0eo5inte] {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom[b-3w0eo5inte] {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow[b-3w0eo5inte] {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy[b-3w0eo5inte] {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+.footer[b-3w0eo5inte] {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+}
+
+.table td[b-3w0eo5inte], .table th[b-3w0eo5inte] {
+    vertical-align: middle;
+}
+
+.description-column[b-3w0eo5inte] {
+    max-width: 300px; 
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+

@@ -1,0 +1,81 @@
+﻿@{
+    ViewData["Title"] = "Validate Applicant ID";
+}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 rounded">
+                <div class="card-header bg-black text-white text-center py-3">
+                    <h4 class="mb-0"><i class="fas fa-user-check"></i> Validate Applicant ID</h4>
+                </div>
+                <div class="card-body p-4">
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger text-center fade show">
+                            <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+                        </div>
+                    }
+
+                    <form asp-action="ValidateApplicantId" method="post" id="validateForm">
+                        <div class="mb-3">
+                            <label for="ApplicantId" class="form-label fw-bold">
+                                Enter Your Application ID
+                            </label>
+                            <div class="input-group">
+                                <input type="number" name="ApplicantId" id="ApplicantId" class="form-control border-primary shadow-sm"
+                                       placeholder="Enter your Applicant ID" required>
+                                <span class="input-group-text bg-primary text-white">
+                                    <i class="fas fa-id-card"></i>
+                                </span>
+                            </div>
+                            <div id="error-message" class="text-danger mt-2 d-none">
+                                <i class="fas fa-exclamation-triangle"></i> Please enter a valid Applicant ID.
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success shadow-sm">
+                                <i class="fas fa-check-circle"></i> Proceed
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById("validateForm").addEventListener("submit", function (event) {
+            const applicantId = document.getElementById("ApplicantId").value.trim();
+            const errorMessage = document.getElementById("error-message");
+
+            if (!applicantId || isNaN(applicantId) || parseInt(applicantId) <= 0) {
+                event.preventDefault();
+                errorMessage.classList.remove("d-none");
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Input',
+                    text: 'Please enter a valid Applicant ID.',
+                    confirmButtonColor: '#d33'
+                });
+            } else {
+                errorMessage.classList.add("d-none");
+            }
+        });
+
+        window.onload = function () {
+            if ('@TempData["ErrorMessage"]' !== '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Failed',
+                    text: '@TempData["ErrorMessage"]',
+                    confirmButtonColor: '#d33'
+                });
+            }
+        };
+    </script>
+}

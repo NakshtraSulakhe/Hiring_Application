@@ -1,0 +1,57 @@
+﻿@model Hiring_Application.Models.Job
+
+@{
+    ViewData["Title"] = "Create Job";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg rounded">
+        <div class="card-header bg-black text-white">
+            <h3 class="mb-0">Create Job</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label fw-bold"></label>
+                    <input asp-for="Title" class="form-control" placeholder="Enter job title" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label fw-bold"></label>
+                    <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter job description"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DatePosted" class="form-label fw-bold"></label>
+                    <input asp-for="DatePosted" type="date" class="form-control" />
+                    <span asp-validation-for="DatePosted" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Slots" class="form-label fw-bold"></label>
+                    <input asp-for="Slots" type="number" class="form-control" placeholder="Enter available slots" />
+                    <span asp-validation-for="Slots" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save"></i> Create Job
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

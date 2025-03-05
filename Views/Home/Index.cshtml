@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<h1>Welcome to Hiring Application</h1>
+<p>Find and manage job applications with ease.</p>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <h2>Hello, @User.Identity.Name!</h2>
+
+  
+   if (User.IsInRole("HR"))
+    {
+        <a asp-controller="Home" asp-action="HrDashboard" class="btn btn-success">Dashboard</a>
+    }
+    else if (User.IsInRole("Applicant"))
+    {
+        <a asp-controller="Home" asp-action="ApplicantDashboard" class="btn btn-info">Dashboard</a>
+    }
+
+    <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post">
+        <button type="button" class="btn btn-danger mt-3" onclick="confirmLogout()">Logout</button>
+    </form>
+
+}
+else
+{
+    <a asp-controller="Account" asp-action="Login" class="btn btn-primary">Login</a>
+    <a asp-controller="Account" asp-action="Register" class="btn btn-secondary">Register</a>
+}
+<script>
+    function confirmLogout() {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You will be logged out!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, Logout!",
+            cancelButtonText: "Cancel"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("logoutForm").submit(); // Submit the form
+            }
+        });
+    }
+</script>

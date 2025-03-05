@@ -1,0 +1,132 @@
+﻿@model Hiring_Application.Models.Applicant
+@{
+    ViewData["Title"] = "Create Application";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg rounded">
+        <div class="card-header bg-dark text-white text-center">
+            <h3><i class="fas fa-user-plus"></i> Create Applicant</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post" enctype="multipart/form-data" id="createApplicantForm">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="FirstName" class="form-label fw-bold"></label>
+                        <input asp-for="FirstName" class="form-control" placeholder="Enter First Name" required />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="LastName" class="form-label fw-bold"></label>
+                        <input asp-for="LastName" class="form-control" placeholder="Enter Last Name" required />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Email" class="form-label fw-bold"></label>
+                        <input asp-for="Email" type="email" class="form-control" placeholder="Enter Email" required />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Phone" class="form-label fw-bold"></label>
+                        <input asp-for="Phone" type="tel" class="form-control" placeholder="Enter Phone Number" required />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="City" class="form-label fw-bold"></label>
+                        <input asp-for="City" class="form-control" placeholder="Enter City" required />
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold">Job Position</label>
+                        <select asp-for="JobId" asp-items="ViewBag.Jobs" class="form-select" required>
+                            <option value="">Select Job</option>
+                        </select>
+                        <span asp-validation-for="JobId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label class="fw-bold">Resume (PDF, DOC, DOCX) <small class="text-muted">(Max: 2MB)</small></label>
+                        <input type="file" name="file" id="resumeFile" class="form-control" accept=".pdf,.doc,.docx" required />
+                        <span asp-validation-for="ResumePath" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-paper-plane"></i> Submit
+                    </button>
+                    <a asp-controller="Home" asp-action="ApplicantDashboard" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.getElementById("resumeFile").addEventListener("change", function () {
+            const file = this.files[0];
+            const allowedExtensions = ["pdf", "doc", "docx"];
+            const fileName = this.value.split(".").pop().toLowerCase();
+            const maxSize = 2 * 1024 * 1024; // 2MB
+
+            if (!allowedExtensions.includes(fileName)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Invalid File Type",
+                    text: "Only PDF, DOC, and DOCX files are allowed.",
+                });
+                this.value = "";
+            } else if (file.size > maxSize) {
+                Swal.fire({
+                    icon: "error",
+                    title: "File Too Large",
+                    text: "The file size must be less than 2MB.",
+                });
+                this.value = "";
+            }
+        });
+
+        document.getElementById("createApplicantForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            Swal.fire({
+                title: "Confirm Submission",
+                text: "Are you sure you want to submit your application?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Submit",
+                cancelButtonText: "Cancel",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+            });
+        });
+
+        window.onload = function () {
+            var successMessage = '@TempData["SuccessMessage"]' || '';
+            if (successMessage.trim() !== '') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: successMessage,
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            }
+        }
+    </script>
+}

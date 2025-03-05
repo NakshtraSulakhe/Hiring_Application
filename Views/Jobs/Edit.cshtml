@@ -1,0 +1,89 @@
+﻿@model Hiring_Application.Models.Job
+
+@{
+    ViewData["Title"] = "Edit Job";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg rounded">
+        <div class="card-header bg-black text-white text-center">
+            <h3><i class="fas fa-edit"></i> Edit Job</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" id="editForm">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <input type="hidden" asp-for="JobId" />
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label fw-bold"></label>
+                    <input asp-for="Title" class="form-control" placeholder="Enter Job Title" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label fw-bold"></label>
+                    <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter Job Description"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DatePosted" class="form-label fw-bold"></label>
+                    <input asp-for="DatePosted" type="date" class="form-control" />
+                    <span asp-validation-for="DatePosted" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Slots" class="form-label fw-bold"></label>
+                    <input asp-for="Slots" type="number" class="form-control" placeholder="Enter Available Slots" />
+                    <span asp-validation-for="Slots" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+                    <button type="button" class="btn btn-primary" onclick="confirmEdit()">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmEdit() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to save the changes?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, Save!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById("editForm").submit();
+                }
+            });
+        }
+
+        window.onload = function () {
+            if ('@TempData["SuccessMessage"]' !== '') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: '@TempData["SuccessMessage"]',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            }
+        }
+    </script>
+}

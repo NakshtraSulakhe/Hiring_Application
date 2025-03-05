@@ -1,0 +1,105 @@
+﻿@model Hiring_Application.Models.Applicant
+
+@{
+    ViewData["Title"] = "Applicant Details";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-dark text-white text-center">
+            <h3><i class="fas fa-user"></i> Applicant Details</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5 class="text-primary"><i class="fas fa-info-circle"></i> Personal Information</h5>
+                    <table class="table table-bordered mt-3">
+                        <tbody>
+                            <tr><th>First Name</th><td>@Model.FirstName</td></tr>
+                            <tr><th>Last Name</th><td>@Model.LastName</td></tr>
+                            <tr><th>Email</th><td>@Model.Email</td></tr>
+                            <tr><th>Phone</th><td>@Model.Phone</td></tr>
+                            <tr><th>City</th><td>@Model.City</td></tr>
+                            <tr><th>Job Applied</th><td>@Model.Job?.Title</td></tr>
+                            <tr><th>Application Date</th><td>@Model.ApplicationDate.ToString("yyyy-MM-dd")</td></tr>
+                            <tr>
+                                <th>Status</th>
+                                <td>
+                                    <span class="badge @(Model.Status == ApplicantStatus.Hired ? "bg-success" : (Model.Status == ApplicantStatus.Rejected ? "bg-danger" : "bg-warning"))">
+                                        @Model.Status
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-md-4">
+                    <h5 class="text-primary"><i class="fas fa-cogs"></i> Actions</h5>
+
+                    <div class="mt-3">
+                        <a href="@Url.Action("Download", "Applicants", new { id = Model.ApplicantId })" class="btn btn-primary btn-block">
+                            <i class="fas fa-download"></i> Download Resume
+                        </a>
+                    </div>
+
+                    <form asp-action="UpdateStatus" method="post" id="statusForm" class="mt-3">
+                        <input type="hidden" name="id" value="@Model.ApplicantId" />
+
+                        <label class="mt-2 font-weight-bold">Update Status:</label>
+                        <select name="status" class="form-control">
+                            @foreach (var status in Enum.GetValues(typeof(ApplicantStatus)))
+                            {
+                                <option value="@status" selected="@(Model.Status == (ApplicantStatus)status ? "selected" : null)">
+                                    @status
+                                </option>
+                            }
+                        </select>
+
+                        <button type="button" class="btn btn-success btn-block mt-3" id="btnUpdateStatus">
+                            <i class="fas fa-sync"></i> Update Status
+                        </button>
+                    </form>
+
+                    <a asp-controller="Home" asp-action="ApplicantDashboard" class="btn btn-secondary btn-block mt-3">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.getElementById("btnUpdateStatus").addEventListener("click", function () {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you want to update the status?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#28a745",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Update!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById("statusForm").submit();
+                }
+            });
+        });
+
+        window.onload = function () {
+            if ('@TempData["SuccessMessage"]' !== '') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: '@TempData["SuccessMessage"]',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            }
+        }
+    </script>
+}

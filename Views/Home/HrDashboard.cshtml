@@ -1,0 +1,138 @@
+﻿@model Hiring_Application.ViewModels.HrDashboardViewModel
+
+<h2>Dashboard</h2>
+
+<section class="content">
+    <div class="d-flex justify-content-sm-around gap-3 flex-wrap">
+        <div class="card text-white bg-info shadow-lg stat-card">
+            <div class="card-body text-center">
+                <h3 class="fw-bold">@Model.TotalApplicants</h3>
+                <p>Total Applicants</p>
+                <i class="fa fa-users fa-2x"></i>
+            </div>
+        </div>
+
+        <div class="card text-white bg-warning shadow-lg stat-card">
+            <div class="card-body text-center">
+                <h3 class="fw-bold">@Model.PendingApplicants</h3>
+                <p>Pending Applicants</p>
+                <i class="fa fa-clock fa-2x"></i>
+            </div>
+        </div>
+
+        <div class="card text-white bg-danger shadow-lg stat-card">
+            <div class="card-body text-center">
+                <h3 class="fw-bold">@Model.RejectedApplicants</h3>
+                <p>Rejected Applicants</p>
+                <i class="fa fa-times-circle fa-2x"></i>
+            </div>
+        </div>
+
+        <div class="card text-white bg-success shadow-lg stat-card">
+            <div class="card-body text-center">
+                <h3 class="fw-bold">@Model.HiredApplicants</h3>
+                <p>Hired Applicants</p>
+                <i class="fa fa-check-circle fa-2x"></i>
+            </div>
+        </div>
+
+        <div class="card text-white bg-primary shadow-lg stat-card">
+            <div class="card-body text-center">
+                <h3 class="fw-bold">@Model.InterviewScheduled</h3>
+                <p>Interview Scheduled</p>
+                <i class="fa fa-calendar fa-2x"></i>
+            </div>
+        </div>
+    </div>
+</section> 
+
+<div class="row mt-4  gap-5">
+        <div class="col-md-3">
+            <div class="card shadow-lg">
+                <div class="card-header text-center bg-primary text-white">
+                    <h4>Applicants Overview</h4>
+                </div>
+                <div class="card-body d-flex justify-content-center">
+                    <canvas id="applicantsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 ml-4">
+            <div class="card shadow-lg">
+                <div class="card-header text-center bg-secondary text-white">
+                    <h4>Job Openings</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Job Title</th>
+                                <th>Openings</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var job in Model.JobOpenings)
+                            {
+                                <tr>
+                                    <td>@job.JobTitle</td>
+                                    <td>@job.Openings</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var ctx = document.getElementById("applicantsChart").getContext("2d");
+        new Chart(ctx, {
+            type: "doughnut",
+            data: {
+                labels: ["Rejected", "Interview Scheduled", "Hired", "Pending"],
+                datasets: [{
+                    data: [
+                    @Model.RejectedApplicants,
+                    @Model.InterviewScheduled,
+                    @Model.HiredApplicants,
+                    @Model.PendingApplicants
+                    ],
+                    backgroundColor: ["#dc3545", "#007bff", "#28a745", "#ffc107"],
+                    hoverOffset: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: "right"
+                    }
+                }
+            }
+        });
+    });
+</script>
+<style>
+    .stat-card {
+        min-width: 200px;
+        height: 120px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        transition: transform 0.2s ease-in-out;
+    }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+        }
+
+
+
+</style>

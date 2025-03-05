@@ -1,0 +1,100 @@
+﻿@model Hiring_Application.ViewModels.ApplicantDashboardViewModel
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4 fw-bold text-dark">✨ Explore Job Opportunities ✨</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    <div class="row justify-content-center">
+        @foreach (var job in Model.AvailableJobs)
+        {
+            <div class="col-lg-4 col-md-8 d-flex align-items-stretch">
+                <div class="card job-card shadow-lg">
+                    <div class="card-header text-white text-center fw-bold">
+                        <h5 class="mb-0">@job.Title</h5>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <p class="text-muted flex-grow-1 text-wrap">@job.Description</p> 
+                        <p class="fw-bold text-primary">
+                            <i class="fa fa-users"></i> Slots Available:
+                            <span class="badge bg-warning text-dark">@job.Slots</span>
+                        </p>
+                        <a href="@Url.Action("Create", "Applicants", new { jobId = job.JobId })" class="btn apply-btn w-100 mt-auto">
+                            <i class="fa fa-user-plus"></i> Apply Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .job-card {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        border: none;
+        transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+        min-height: 300px; 
+        max-width: 600px; 
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow: hidden; 
+    }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+    .card-header {
+        background: linear-gradient(135deg, #FF6B6B, #FFA07A);
+        font-size: 1.2rem;
+        padding: 15px;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        word-wrap: break-word; 
+
+    .apply-btn {
+        background: linear-gradient(135deg, #6A11CB, #2575FC);
+        color: white;
+        border-radius: 10px;
+        font-weight: bold;
+        transition: background 0.3s ease-in-out;
+        padding: 10px;
+    }
+
+        .apply-btn:hover {
+            background: linear-gradient(135deg, #2575FC, #6A11CB);
+        }
+
+    .text-muted {
+        font-size: 0.9rem;
+    }
+
+    .badge {
+        font-size: 1rem;
+        padding: 6px 12px;
+        border-radius: 10px;
+    }
+
+    .row .col-lg-6, .row .col-md-8 {
+        display: flex;
+    }
+
+    .text-wrap {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+</style>

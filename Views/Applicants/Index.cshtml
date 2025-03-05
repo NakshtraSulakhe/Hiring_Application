@@ -1,0 +1,142 @@
+﻿@model IEnumerable<Hiring_Application.Models.Applicant>
+
+@{
+    ViewData["Title"] = "Applicants";
+}
+
+<h2 class="mb-4 text-center"><i class="fas fa-user"></i>  Applicants List</h2>
+
+<div class="card shadow-sm p-3 mb-4">
+    <form method="get" class="row g-3">
+        <div class="col-md-4">
+            <input type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="Search by Name...">
+        </div>
+        <div class="col-md-3">
+            <select name="status" class="form-control">
+                <option value="">All Statuses</option>
+                @foreach (var status in Enum.GetValues(typeof(ApplicantStatus)))
+                {
+                    <option value="@status" selected="@(ViewBag.Status == status.ToString() ? "selected" : null)">
+                        @status
+                    </option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select name="jobId" class="form-control">
+                <option value="0">All Jobs</option>
+                @foreach (var job in ViewBag.Jobs)
+                {
+                    <option value="@job.JobId" selected="@(ViewBag.JobId == job.JobId ? "selected" : null)">
+                        @job.Title
+                    </option>
+                }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+        </div>
+    </form>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>City</th>
+                <th>Job Applied</th>
+                <th>Status</th>
+                <th>Resume</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var applicant in Model)
+            {
+                <tr>
+                    <td>@applicant.FirstName @applicant.LastName</td>
+                    <td>@applicant.Email</td>
+                    <td>@applicant.Phone</td>
+                    <td>@applicant.City</td>
+                    <td>@applicant.Job?.Title</td>
+                    <td>
+                        <span class="badge @(applicant.Status == ApplicantStatus.Pending ? "bg-warning" :
+                                          applicant.Status == ApplicantStatus.InterviewScheduled ? "bg-info" :
+                                          applicant.Status == ApplicantStatus.Hired ? "bg-success" : "bg-danger")">
+                            @applicant.Status
+                        </span>
+                    </td>
+                    <td>
+                         <a asp-action="Download" asp-route-id="@applicant.ApplicantId" class="btn btn-sm btn-primary">
+                      
+                            <i class="fas fa-file-download"></i> Download Resume
+                            </a>
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@applicant.ApplicantId" class="btn btn-sm btn-info">
+                            <i class="fas fa-eye"></i> Details
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@applicant.ApplicantId" class="btn btn-sm btn-warning">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a href="javascript:void(0);" onclick="confirmDelete(@applicant.ApplicantId)" class="btn btn-sm btn-danger">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (ViewBag.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@i"
+                       asp-route-search="@ViewBag.Search" asp-route-status="@ViewBag.Status" asp-route-jobId="@ViewBag.JobId">
+                        @i
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "/Applicants/Delete/" + id;
+                }
+            });
+        }
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <text>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: '@TempData["SuccessMessage"]'
+                });
+            </text>
+        }
+    </script>
+}
