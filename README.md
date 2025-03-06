@@ -73,3 +73,17 @@ Applicants receive email notifications in these scenarios:
    ```bash
    git clone https://github.com/your-repo/hiring-application.git
    cd hiring-application
+
+## Screenshots
+
+### Applicant Dashboard  
+![Applicant Dashboard](WebImages/ApplicantDashboard.png)
+
+### Applicant List View  
+![Applicant List View](WebImages/ApplicantListView.png)
+
+### HR Dashboard  
+![HR Dashboard](WebImages/HRDashboard.png)
+
+### Job List View  
+![Job List View](WebImages/JoblistView.png)

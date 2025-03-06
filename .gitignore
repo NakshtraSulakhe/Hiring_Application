@@ -1,6 +1,8 @@
-﻿namespace Hiring_Application
-{
-    public class _
-    {
-    }
-}
+﻿bin/
+obj/
+*.db
+*.db-journal
+appsettings.json
+secrets.json
+node_modules/
+wwwroot/lib/
